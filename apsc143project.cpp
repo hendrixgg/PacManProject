@@ -21,8 +21,6 @@
 #define COLS 9
 #define ROWS 9
 
-// Below are the required functions for this program, but you will need to create your own as well.
-// Make sure to specify the required parameters, if any.
 char ** initMap(const char *mapFilePath, int rows, int cols){
     FILE* mapFile = fopen(mapFilePath, "r");
     char **map = (char **)malloc(rows*sizeof(char*));
@@ -56,18 +54,32 @@ int isWall(/*parameters*/){
 int main() {
     // load the map array (9 rows, 9 cols) of characters
     char **map = initMap("map.txt", ROWS, COLS);
-
+    // maybe save the location of
     printf("press 'q' or esc to exit.\n");
     while(true){
         printMap(map, ROWS, COLS);
+
         // input
         char input = getch();
         if(input == ESC || input == 'q' || input == 'Q')
             break;
         printf("input: %d, %c\n", input, input);
+
+        // TODO: identify where the ghosts are (find them in the map or save their positions)
+
+        // TODO: move ghosts
+            // array for location of ghosts
+            // determine direction of movement (line of sight, or random)
+
+        // TODO: move PacMan
+            // check if the input was valid
+            // collect a pellet if PacMan lands on one
+
+        // TODO: check if won/lost -> if yes: break the loop and print game over condition to user
     }
     printf("game over\n");
     printf("press any key to exit\n");
     getch();
+    free(map);
     return 0;
 }
