@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
+#include <windows.h>
 #include "colours.h"
 
 // You don't need to use these, but they help make your code look more organized
@@ -54,13 +55,13 @@ int isWall(/*parameters*/){
 int main() {
     // load the map array (9 rows, 9 cols) of characters
     char **map = initMap("map.txt", ROWS, COLS);
+    char input = 0;
     // maybe save the location of
     printf("press 'q' or esc to exit.\n");
     while(true){
+        system("CLS");
         printMap(map, ROWS, COLS);
-
         // input
-        char input = getch();
         if(input == ESC || input == 'q' || input == 'Q')
             break;
         printf("input: %d, %c\n", input, input);
@@ -76,6 +77,8 @@ int main() {
             // collect a pellet if PacMan lands on one
 
         // TODO: check if won/lost -> if yes: break the loop and print game over condition to user
+
+        input = getch();
     }
     printf("game over\n");
     printf("press any key to exit\n");
