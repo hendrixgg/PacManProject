@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\PacManProject.dir/objects.a
+C:\MinGW\bin\ar.exe qc CMakeFiles\PacManProject.dir/objects.a @CMakeFiles\PacManProject.dir\objects1.rsp
+C:\MinGW\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\PacManProject.dir/objects.a -Wl,--no-whole-archive -o PacManProject.exe -Wl,--out-implib,libPacManProject.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\PacManProject.dir\linklibs.rsp

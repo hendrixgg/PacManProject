@@ -1,0 +1,12 @@
+[
+{
+  "directory": "C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/build",
+  "command": "C:\\MinGW\\bin\\g++.exe   -g -o CMakeFiles\\PacManProject.dir\\apsc143project.cpp.obj -c C:\\Users\\Hendrix\\CLionProjects\\APSC143Final-Project\\PacManProject\\apsc143project.cpp",
+  "file": "C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/apsc143project.cpp"
+},
+{
+  "directory": "C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/build",
+  "command": "C:\\MinGW\\bin\\g++.exe   -g -o CMakeFiles\\PacManProject.dir\\colours.cpp.obj -c C:\\Users\\Hendrix\\CLionProjects\\APSC143Final-Project\\PacManProject\\colours.cpp",
+  "file": "C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/colours.cpp"
+}
+]
