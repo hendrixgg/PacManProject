@@ -21,6 +21,16 @@
 #define COLS 11
 #define ROWS 11
 
+// assumes that size > 0
+int min(int *arr, size_t size){
+    int min = arr[0];
+    for(size_t i = 1; i < size; ++i){
+        if(arr[i] < min)
+            min = arr[i];
+    }
+    return min;
+}
+
 int initGame(const char *mapFilePath, char ***map, int rows, int cols, int pacManPos[2], int ghostPos[2][2]){
     FILE* mapFile = fopen(mapFilePath, "r");
     if(mapFile == NULL){
@@ -69,13 +79,43 @@ void printMap(char **map, const int rows, const int cols, const int pacManPos[2]
         puts("");
     }
 }
+
+// move ghost in direction of shortest path to pac man
+void moveGhost(char **map, int ghostPos[2], int pacManPos[2]){
+
+}
+
+// comput the minimum distance to pac man from position on the map (i, j) using breadth-first-search
+int distToPacMan(char **map, int i, int j, int pacManPos[2]){
+    if(isWall(map, i, j))
+        return 1e5;
+    if(i == pacManPos[0] && j == pacManPos[1])
+        return 0;
+    
+    int dist[4];
+    // move up
+    dist[0] = distToPacMan(map, i + 1, j, pacManPos);
+    // move down
+    dist[1] = distToPacMan(map, i - 1, j, pacManPos);
+    // move left
+    dist[2] = distToPacMan(map, i, j - 1, pacManPos);
+    // move right
+    dist[3] = distToPacMan(map, i, j + 1, pacManPos);
+
+    return 1 + min(dist, 4);
+}
+
 int winCheck(/*parameters*/){
     return 0;
 }
 int loseCheck(/*parameters*/){
     return 0;
 }
-int isWall(/*parameters*/){
+
+//returns 1 if the nearest tile in the specified direction is a wall tile or out of bounds, and 0 if not.
+int isWall(char **map, int i, int j){
+    if(map[i][j] == WALL)
+        return 1;
     return 0;
 }
 
@@ -96,7 +136,6 @@ int main() {
         key = getch();
 
         // TODO: move ghosts
-            // array for location of ghosts
             // determine direction of movement (line of sight, or random, or Breadth-First-Search from ghost to pacman)
 
         // TODO: move PacMan
