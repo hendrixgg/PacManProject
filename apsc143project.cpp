@@ -21,14 +21,24 @@
 #define COLS 11
 #define ROWS 11
 
-void initGame(const char *mapFilePath, char ***map, int rows, int cols, int pacManPos[2], int ghostPos[2][2]){
+int initGame(const char *mapFilePath, char ***map, int rows, int cols, int pacManPos[2], int ghostPos[2][2]){
     FILE* mapFile = fopen(mapFilePath, "r");
+    if(mapFile == NULL){
+        printf("error opening %s: No such file or directory\n", mapFilePath);
+        fclose(mapFile);
+        return 1;
+    }
     *map = (char **)malloc(rows*sizeof(char*));
     int numGhosts = 0;
     for(int i = 0; i < rows; ++i) {
         (*map)[i] = (char *) malloc(cols * sizeof(char));
         for(int j = 0; j < cols; ++j){
-            fscanf(mapFile, "%c ", &(*map)[i][j]);
+            // read input and check for error
+            if(fscanf(mapFile, "%c ", &(*map)[i][j]) == EOF){
+                printf("error reading %s: reached end of file\n", mapFilePath);
+                fclose(mapFile);
+                return -1;
+            }
             if((*map)[i][j] == PACMAN) {
                 (*map)[i][j] = EMPTY;
                 pacManPos[0] = i, pacManPos[1] = j;
@@ -39,6 +49,8 @@ void initGame(const char *mapFilePath, char ***map, int rows, int cols, int pacM
             }
         }
     }
+    fclose(mapFile);
+    return 0;
 }
 
 // TODO: add in colors
@@ -71,10 +83,10 @@ int main() {
     int pacManPos[2], ghostPos[2][2];
     char **map, key = 0;
     // load the map array (9 rows, 9 cols) of characters, and get initial PacMan and Ghost positions
-    initGame("map.txt", &map, ROWS, COLS, pacManPos, ghostPos);
+    int status = initGame("../map.txt", &map, ROWS, COLS, pacManPos, ghostPos);
 
     printf("press 'q' or esc to exit.\n");
-    while(true){
+    while(status == 0){
         system("CLS");
         printMap(map, ROWS, COLS, pacManPos, ghostPos);
         // input
