@@ -34,6 +34,7 @@ void initGame(const char *mapFilePath, char ***map, int rows, int cols, int pacM
                 (*map)[i][j] = EMPTY;
                 pacManPos[0] = i, pacManPos[1] = j;
             }else if((*map)[i][j] == GHOST){
+                // assuming that a ghost is covering a dot
                 (*map)[i][j] = DOT;
                 ghostPos[numGhosts][0] = i, ghostPos[numGhosts][1] = j, ++numGhosts;
             }
