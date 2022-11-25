@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
-#include <windows.h>
 #include "colours.h"
 
 // You don't need to use these, but they help make your code look more organized
@@ -86,7 +85,7 @@ int main() {
 
         // TODO: move ghosts
             // array for location of ghosts
-            // determine direction of movement (line of sight, or random)
+            // determine direction of movement (line of sight, or random, or Breadth-First-Search from ghost to pacman)
 
         // TODO: move PacMan
             // check if the input was valid
