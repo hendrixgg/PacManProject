@@ -21,12 +21,13 @@
 #define COLS 11
 #define ROWS 11
 
+// returns the pointer to the minimum element in the array
 // assumes that size > 0
-int min(int *arr, size_t size){
-    int min = arr[0];
+int *min(int *arr, size_t size){
+    int *min = arr;
     for(size_t i = 1; i < size; ++i){
-        if(arr[i] < min)
-            min = arr[i];
+        if(arr[i] < *min)
+            min = arr + i;
     }
     return min;
 }
@@ -82,7 +83,7 @@ void printMap(char **map, const int rows, const int cols, const int pacManPos[2]
 
 // move ghost in direction of shortest path to pac man
 void moveGhost(char **map, int ghostPos[2], int pacManPos[2]){
-
+    int dir[2];
 }
 
 // comput the minimum distance to pac man from position on the map (i, j) using breadth-first-search
@@ -102,7 +103,7 @@ int distToPacMan(char **map, int i, int j, int pacManPos[2]){
     // move right
     dist[3] = distToPacMan(map, i, j + 1, pacManPos);
 
-    return 1 + min(dist, 4);
+    return 1 + *min(dist, 4);
 }
 
 int winCheck(/*parameters*/){
