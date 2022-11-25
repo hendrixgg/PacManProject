@@ -54,7 +54,7 @@ int initGame(const char *mapFilePath, char ***map, int rows, int cols, int pacMa
 }
 
 // TODO: add in colors
-void printMap(char **map, int rows, int cols, int pacManPos[2], int ghostPos[2][2]){
+void printMap(char **map, const int rows, const int cols, const int pacManPos[2], const int ghostPos[2][2]){
     for(int i = 0; i < rows; ++i){
         printf("%c ", map[i][0]);
         for(int j = 1; j < cols; ++j){
