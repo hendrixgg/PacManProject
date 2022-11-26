@@ -100,12 +100,13 @@ int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, int pacManPos[2]
 }
 
 // move ghost in direction of shortest path to pac man
+// TODO: make actual breadth first search
 void moveGhost(char **map, int ghostPos[2], int pacManPos[2]){
     int minDist = 1e9, dirIdx = 0, dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // {up, down, left, right}
     int vis[ROWS][COLS];
 
     for(int i = 0; i < 4; ++i) {
-        if(isWall(map, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1])) continue;
+        if(isWall(map, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1]) || map[ghostPos[0] + dirs[i][0]][ghostPos[1] + dirs[i][1]] == GHOST) continue;
         int dist = distToPacMan(map, vis, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1], pacManPos, dirs);
         if(dist < minDist)
             dirIdx = i, minDist = dist;
