@@ -59,18 +59,31 @@ int initGame(const char *mapFilePath, char ***map, int rows, int cols, int pacMa
 // TODO: add in colors
 void printMap(char **map, const int rows, const int cols, const int pacManPos[2], const int ghostPos[2][2]){
     for(int i = 0; i < rows; ++i){
+        colourChange(BLUE);
         printf("%c ", map[i][0]);
         for(int j = 1; j < cols; ++j){
             char c = map[i][j];
-            if(i == pacManPos[0] && j == pacManPos[1])
+            if(i == pacManPos[0] && j == pacManPos[1]){
                 c = PACMAN;
-            for(int k = 0; k < 2; ++k)
-                if(i == ghostPos[k][0] && j == ghostPos[k][1])
+            }
+            for(int k = 0; k < 2; ++k){
+                if(i == ghostPos[k][0] && j == ghostPos[k][1]){
                     c = GHOST;
+                }
+            }
+            if (c == WALL)
+                colourChange(BLUE);
+            else if (c == PACMAN)
+                colourChange(YELLOW);
+            else if(c == GHOST)
+                colourChange(PINK);
+            else
+                colourChange(WHITE);
             printf(" %c ", c);
         }
         puts("");
     }
+    colourChange(WHITE);
 }
 
 //returns 1 if the nearest tile in the specified direction is a wall tile or out of bounds, and 0 if not.
@@ -100,7 +113,7 @@ int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, int pacManPos[2]
 }
 
 // move ghost in direction of shortest path to pac man
-// TODO: make actual breadth first search
+// TODO: fix stacking, make actual breadth first search
 void moveGhost(char **map, int ghostPos[2], int pacManPos[2]){
     int minDist = 1e9, dirIdx = 0, dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // {up, down, left, right}
     int vis[ROWS][COLS];
