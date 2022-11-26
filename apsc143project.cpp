@@ -122,10 +122,43 @@ int removeDot(char **map, int pacManPos[2]){
     return 0;
 }
 
-int winCheck(/*parameters*/){
-    return 0;
+//Check if PacMan has won if the dots remaining are equal to zero.
+int winCheck(int dots){
+    return dots == 0;
 }
-int loseCheck(/*parameters*/){
+
+//Conditions for ghost touch detection
+#define UNDERTOUCH (pacManPos[0]+1 == ghostPos[0][0] && pacManPos[1] == ghostPos[0][1]) || (pacManPos[0]+1 == ghostPos[1][0]  && pacManPos[1] == ghostPos[1][1])
+#define ABOVETOUCH (pacManPos[0]-1 == ghostPos[0][0] && pacManPos[1] == ghostPos[0][1]) || (pacManPos[0]-1 == ghostPos[1][0] && pacManPos[1] == ghostPos[1][1])
+#define RIGHTTOUCH (pacManPos[1]+1 == ghostPos[0][1] && pacManPos[0] == ghostPos[0][0]) || (pacManPos[1]+1 == ghostPos[1][1]&& pacManPos[0] == ghostPos[1][0])
+#define LEFTTOUCH (pacManPos[1]-1 == ghostPos[0][0] && pacManPos[0] == ghostPos[0][0]) || (pacManPos[1]-1 == ghostPos[1][1] && pacManPos[0] == ghostPos[1][0])
+#define CONTACT (pacManPos[0] == ghostPos[0][0] && pacManPos[1] == ghostPos[0][1]) || (pacManPos[0] == ghostPos[1][0] && pacManPos[1] == ghostPos[1][1])
+
+//If Pacman hits a ghost, he loses.
+int loseCheck(int pacManPos[2], int ghostPos[2][2]){
+
+    /*
+     * If statements check if there is a ghost 1 space in proximity to PacMan and also check that
+     * there are in the same rows/columns so that
+     * the ghost does not have a laser beam of detection.
+     */
+
+        if(UNDERTOUCH){ //If Ghost is underneath.
+            //printf("Under\n");
+            return 1;
+        }else if(ABOVETOUCH){ //If Ghost is above.
+            //printf("Over\n");
+            return 1;
+        }else if(RIGHTTOUCH){ //If Ghost is right.
+            //printf("Right\n");
+            return 1;
+        }else if(LEFTTOUCH){ //If Ghost is left.
+            //printf("Left\n");
+            return 1;
+        }else if(CONTACT){ //If they are in contact/stacked.
+            //printf("Contact\n");
+            return 1;
+        }
     return 0;
 }
 
@@ -188,16 +221,23 @@ int main() {
         movePacman(key, map, pacManPos, &dotsRemaining);
         // collect a pellet if PacMan lands on one
         dotsRemaining -= removeDot(map, pacManPos);
-        printf("ghosts: (%d, %d) (%d, %d)\n", ghostPos[0][0], ghostPos[0][1], ghostPos[1][0], ghostPos[1][1]);
+        //printf("ghosts: (%d, %d) (%d, %d)\n", ghostPos[0][0], ghostPos[0][1], ghostPos[1][0], ghostPos[1][1]);
         // TODO: move ghosts
         for(int i = 0; i < 2; ++i)
             moveGhost(map, ghostPos[i], pacManPos);
         // determine direction of movement (line of sight, or random, or Breadth-First-Search from ghost to pacman)
 
         // TODO: check if won/lost -> if yes: break the loop and print game over condition to user
+        if(winCheck(dotsRemaining)){
+            printf("Congratulations! You win! Press any key to exit the game\n");
+            break;
+        }else if(loseCheck(pacManPos,ghostPos)){
+            system("CLS");
+            printMap(map, ROWS, COLS, pacManPos, ghostPos);
+            printf("Sorry, you lose. Press any key to exit a game\n");
+            break;
+        }
     }
-    printf("game over\n");
-    printf("press any key to exit\n");
     getch();
     free(map);
     return 0;
