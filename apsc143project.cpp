@@ -83,26 +83,6 @@ void printMap(char **map, const int rows, const int cols, const int pacManPos[2]
     }
 }
 
-// move ghost in direction of shortest path to pac man
-void moveGhost(char **map, int ghostPos[2], int pacManPos[2]){
-    int dir[2];
-    int vis[ROWS][COLS];
-}
-
-//returns 1 if the nearest tile in the specified direction is a wall tile or out of bounds, and 0 if not.
-int isWall(char **map, int i, int j){
-    return map[i][j] == WALL;
-}
-
-//Remove dot from map if PacMan is on a dot.
-int removeDot(char **map, int pacManPos[2]){
-    if(map[pacManPos[0]][pacManPos[1]] == DOT){
-        map[pacManPos[0]][pacManPos[1]] = EMPTY;
-        return 1;
-    }
-    return 0;
-}
-
 // comput the minimum distance to pac man from position on the map (i, j) using breadth-first-search
 int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, int pacManPos[2]){
     if(vis[i][j] == 1 || isWall(map, i, j))
@@ -124,6 +104,26 @@ int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, int pacManPos[2]
 
     vis[i][j] = 0;
     return 1 + *min(dist, 4);
+}
+
+// move ghost in direction of shortest path to pac man
+void moveGhost(char **map, int ghostPos[2], int pacManPos[2]){
+    int dir[2];
+    int vis[ROWS][COLS];
+}
+
+//returns 1 if the nearest tile in the specified direction is a wall tile or out of bounds, and 0 if not.
+int isWall(char **map, int i, int j){
+    return map[i][j] == WALL;
+}
+
+//Remove dot from map if PacMan is on a dot.
+int removeDot(char **map, int pacManPos[2]){
+    if(map[pacManPos[0]][pacManPos[1]] == DOT){
+        map[pacManPos[0]][pacManPos[1]] = EMPTY;
+        return 1;
+    }
+    return 0;
 }
 
 int winCheck(/*parameters*/){
