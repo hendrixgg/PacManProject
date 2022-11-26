@@ -30,6 +30,7 @@ int initGame(const char *mapFilePath, char ***map, int rows, int cols, int pacMa
     }
     *map = (char **)malloc(rows*sizeof(char*));
     int numGhosts = 0;
+    *dots = 0;
     for(int i = 0; i < rows; ++i) {
         (*map)[i] = (char *) malloc(cols * sizeof(char));
         for(int j = 0; j < cols; ++j){
@@ -109,7 +110,7 @@ void moveGhost(char **map, int ghostPos[2], int pacManPos[2]){
         if(dist < minDist)
             dirIdx = i, minDist = dist;
     }
-    printf("direction: %d\n", dirIdx);
+
     ghostPos[0] += dirs[dirIdx][0], ghostPos[1] += dirs[dirIdx][1];
 }
 
@@ -131,7 +132,7 @@ int winCheck(int dots){
 #define UNDERTOUCH (pacManPos[0]+1 == ghostPos[0][0] && pacManPos[1] == ghostPos[0][1]) || (pacManPos[0]+1 == ghostPos[1][0]  && pacManPos[1] == ghostPos[1][1])
 #define ABOVETOUCH (pacManPos[0]-1 == ghostPos[0][0] && pacManPos[1] == ghostPos[0][1]) || (pacManPos[0]-1 == ghostPos[1][0] && pacManPos[1] == ghostPos[1][1])
 #define RIGHTTOUCH (pacManPos[1]+1 == ghostPos[0][1] && pacManPos[0] == ghostPos[0][0]) || (pacManPos[1]+1 == ghostPos[1][1]&& pacManPos[0] == ghostPos[1][0])
-#define LEFTTOUCH (pacManPos[1]-1 == ghostPos[0][0] && pacManPos[0] == ghostPos[0][0]) || (pacManPos[1]-1 == ghostPos[1][1] && pacManPos[0] == ghostPos[1][0])
+#define LEFTTOUCH (pacManPos[1]-1 == ghostPos[0][1] && pacManPos[0] == ghostPos[0][0]) || (pacManPos[1]-1 == ghostPos[1][1] && pacManPos[0] == ghostPos[1][0])
 #define CONTACT (pacManPos[0] == ghostPos[0][0] && pacManPos[1] == ghostPos[0][1]) || (pacManPos[0] == ghostPos[1][0] && pacManPos[1] == ghostPos[1][1])
 
 //If Pacman hits a ghost, he loses.
@@ -144,26 +145,26 @@ int loseCheck(int pacManPos[2], int ghostPos[2][2]){
      */
 
         if(UNDERTOUCH){ //If Ghost is underneath.
-            //printf("Under\n");
+            printf("Under\n");
             return 1;
         }else if(ABOVETOUCH){ //If Ghost is above.
-            //printf("Over\n");
+            printf("Over\n");
             return 1;
         }else if(RIGHTTOUCH){ //If Ghost is right.
-            //printf("Right\n");
+            printf("Right\n");
             return 1;
         }else if(LEFTTOUCH){ //If Ghost is left.
-            //printf("Left\n");
+            printf("Left\n");
             return 1;
         }else if(CONTACT){ //If they are in contact/stacked.
-            //printf("Contact\n");
+            printf("Contact\n");
             return 1;
         }
     return 0;
 }
 
 //Changes PacMan's position based on key input if the new position is valid.
-void movePacman(char key, char **map, int pacManPos[2], int *dots){
+void movePacman(char key, char **map, int pacManPos[2]){
     switch (key){
         case UP: {
             if(isWall(map,pacManPos[0]-1,pacManPos[1])){
@@ -211,6 +212,7 @@ int main() {
     while(status == 0){
         system("CLS");
         printMap(map, ROWS, COLS, pacManPos, ghostPos);
+
         // input
         if(key == ESC || key == 'q' || key == 'Q')
             break;
@@ -218,7 +220,7 @@ int main() {
         key = getch();
 
         // move PacMan
-        movePacman(key, map, pacManPos, &dotsRemaining);
+        movePacman(key, map, pacManPos);
         // collect a pellet if PacMan lands on one
         dotsRemaining -= removeDot(map, pacManPos);
         //printf("ghosts: (%d, %d) (%d, %d)\n", ghostPos[0][0], ghostPos[0][1], ghostPos[1][0], ghostPos[1][1]);
@@ -229,10 +231,13 @@ int main() {
 
         // TODO: check if won/lost -> if yes: break the loop and print game over condition to user
         if(winCheck(dotsRemaining)){
+            system("CLS");
+            printMap(map, ROWS, COLS, pacManPos, ghostPos);
             printf("Congratulations! You win! Press any key to exit the game\n");
             break;
         }else if(loseCheck(pacManPos,ghostPos)){
             system("CLS");
+            // printf("pacman(%d, %d), ghosts(%d, %d), (%d, %d)\n", pacManPos[0], pacManPos[1], ghostPos[0][0], ghostPos[0][1], ghostPos[1][0], ghostPos[1][1]);
             printMap(map, ROWS, COLS, pacManPos, ghostPos);
             printf("Sorry, you lose. Press any key to exit a game\n");
             break;
