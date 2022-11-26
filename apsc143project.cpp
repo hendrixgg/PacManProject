@@ -89,9 +89,7 @@ void moveGhost(char **map, int ghostPos[2], int pacManPos[2]){
 
 //returns 1 if the nearest tile in the specified direction is a wall tile or out of bounds, and 0 if not.
 int isWall(char **map, int i, int j){
-    if(map[i][j] == WALL)
-        return 1;
-    return 0;
+    return map[i][j] == WALL;
 }
 
 // comput the minimum distance to pac man from position on the map (i, j) using breadth-first-search
