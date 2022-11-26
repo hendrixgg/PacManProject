@@ -84,25 +84,36 @@ void printMap(char **map, const int rows, const int cols, const int pacManPos[2]
 // move ghost in direction of shortest path to pac man
 void moveGhost(char **map, int ghostPos[2], int pacManPos[2]){
     int dir[2];
+    int vis[ROWS][COLS];
+}
+
+//returns 1 if the nearest tile in the specified direction is a wall tile or out of bounds, and 0 if not.
+int isWall(char **map, int i, int j){
+    if(map[i][j] == WALL)
+        return 1;
+    return 0;
 }
 
 // comput the minimum distance to pac man from position on the map (i, j) using breadth-first-search
-int distToPacMan(char **map, int i, int j, int pacManPos[2]){
-    if(isWall(map, i, j))
+int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, int pacManPos[2]){
+    if(vis[i][j] == 1 || isWall(map, i, j))
         return 1e5;
     if(i == pacManPos[0] && j == pacManPos[1])
         return 0;
     
+    vis[i][j] = 1;
+
     int dist[4];
     // move up
-    dist[0] = distToPacMan(map, i + 1, j, pacManPos);
+    dist[0] = distToPacMan(map, vis, i + 1, j, pacManPos);
     // move down
-    dist[1] = distToPacMan(map, i - 1, j, pacManPos);
+    dist[1] = distToPacMan(map, vis, i - 1, j, pacManPos);
     // move left
-    dist[2] = distToPacMan(map, i, j - 1, pacManPos);
+    dist[2] = distToPacMan(map, vis, i, j - 1, pacManPos);
     // move right
-    dist[3] = distToPacMan(map, i, j + 1, pacManPos);
+    dist[3] = distToPacMan(map, vis, i, j + 1, pacManPos);
 
+    vis[i][j] = 0;
     return 1 + *min(dist, 4);
 }
 
@@ -113,12 +124,6 @@ int loseCheck(/*parameters*/){
     return 0;
 }
 
-//returns 1 if the nearest tile in the specified direction is a wall tile or out of bounds, and 0 if not.
-int isWall(char **map, int i, int j){
-    if(map[i][j] == WALL)
-        return 1;
-    return 0;
-}
 
 int main() {
     int pacManPos[2], ghostPos[2][2];
