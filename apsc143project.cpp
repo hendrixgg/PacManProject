@@ -132,7 +132,7 @@ int distToPacMan(char **map, const int row, const int col, const int pacManPos[2
     std::vector<std::vector<bool>> vis(ROWS, std::vector<bool>(COLS, false));
     std::queue<std::pair<int, std::pair<int, int>>> q; // (dist, (row, col))
     // distance of 1 to move to an adjacent position
-    q.emplace(1, std::make_pair(row, col));
+    q.emplace(0, std::make_pair(row, col));
     return distToPacManRecur(map, vis, q, pacManPos, dirs);
 }
 
@@ -146,7 +146,7 @@ void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManP
         const int row = ghostPos[0] + dirs[i][0], col = ghostPos[1] + dirs[i][1];
         if(isWall(map, row, col) || isGhost(allGhosts, row, col)) continue;
         // if this is a valid move, compute distance to pac man
-        int dist = distToPacMan(map, row, col, pacManPos, dirs);
+        int dist = 1 + distToPacMan(map, row, col, pacManPos, dirs);
         // printf(", dist = %d\n", dist);
         // if this is the smallest distance, save the direction
         if(dist < minDist)
