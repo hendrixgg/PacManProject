@@ -1,5 +1,5 @@
 // APSC 143 Engineering Programming Project Starter Code
-// Feel free to change anything about this file, but do not remove "#include "colours.h".
+// Feel free to change anything about this file, but do not remove "#include "colours.h"".
 
 // Make sure to include all relevant libraries
 #include <stdio.h>
@@ -127,7 +127,7 @@ int distToPacManRecur(char **map, std::vector<std::vector<bool>> &vis, std::queu
     return distToPacManRecur(map, vis, q, pacManPos, dirs);
 }
 
-// computes the minimum distance to pac man by calling the recursive version of this funciton
+// computes the minimum distance to pac man by calling the recursive version of this function
 int distToPacMan(char **map, const int row, const int col, const int pacManPos[2], const int dirs[4][2]){
     std::vector<std::vector<bool>> vis(ROWS, std::vector<bool>(COLS, false));
     std::queue<std::pair<int, std::pair<int, int>>> q; // (dist, (row, col))
@@ -136,7 +136,7 @@ int distToPacMan(char **map, const int row, const int col, const int pacManPos[2
     return distToPacManRecur(map, vis, q, pacManPos, dirs);
 }
 
-// move ghost in direction of shortest path to pac man
+// move ghost in direction of the shortest path to pac man
 void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManPos[2], int ghostPos[2]){
     int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // {up, down, left, right}
     int minDist = 1e9, dirIdx = -1;
@@ -227,7 +227,7 @@ int loseCheck(int pacManPos[2], int ghostPos[NUM_GHOSTS][2]){
     return 0;
 }
 
-// recieves input from the user and only returns the key if it would have an effect on the game
+// receives input from the user and only returns the key if it would have an effect on the game
 char input(){
     char key;
     do{
