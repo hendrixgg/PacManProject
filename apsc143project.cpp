@@ -211,7 +211,6 @@ char input(){
     return key;
 }
 
-
 int main() {
     int pacManPos[2], ghostPos[2][2], dotsRemaining;
     char **map, key = 0;
