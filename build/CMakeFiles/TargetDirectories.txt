@@ -1,3 +1,0 @@
-C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/build/CMakeFiles/PacManProject.dir
-C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/build/CMakeFiles/edit_cache.dir
-C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/build/CMakeFiles/rebuild_cache.dir

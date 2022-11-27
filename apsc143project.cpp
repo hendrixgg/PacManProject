@@ -117,7 +117,7 @@ int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, const int pacMan
     return 1 + minDist;
 }
 
-// move ghost in direction of shortest path to pac man
+// move ghost in direction of the shortest path to pac man
 void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManPos[2], int ghostPos[2]){
     int minDist = 1e9, dirIdx = 0, dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // {up, down, left, right}
     int vis[ROWS][COLS];
