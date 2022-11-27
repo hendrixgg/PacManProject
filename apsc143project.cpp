@@ -220,7 +220,7 @@ int loseCheck(int pacManPos[2], int ghostPos[NUM_GHOSTS][2]){
     char strDirs[5][10] = {"Above", "Below", "Left", "Right", "Contact"};
     for(int i = 0; i < 5; ++i){
         if(isGhost(ghostPos, pacManPos[0] + dirs[i][0], pacManPos[1] + dirs[i][1])){
-            puts(strDirs[i]);
+            // puts(strDirs[i]);
             return 1;
         }
     }
