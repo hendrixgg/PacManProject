@@ -77,56 +77,7 @@ CMakeFiles/PacManProject.dir/apsc143project.cpp.obj: C:/Users/Hendrix/CLionProje
   C:/MinGW/include/olectlid.h \
   C:/MinGW/include/oleauto.h \
   C:/MinGW/include/oaidl.h \
-  C:/MinGW/include/oleidl.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/queue \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/deque \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_algobase.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/functexcept.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/exception_defines.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/cpp_type_traits.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/ext/type_traits.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/ext/numeric_traits.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_pair.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/move.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/concept_check.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/type_traits \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_iterator_base_types.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_iterator_base_funcs.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/debug/assertions.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_iterator.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/ptr_traits.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/debug/debug.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/predefined_ops.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/allocator.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32/bits/c++allocator.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/ext/new_allocator.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/new \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/exception \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/atomic_lockfree_defines.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/exception_ptr.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/nested_exception.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/memoryfwd.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_construct.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/ext/alloc_traits.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/alloc_traits.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_uninitialized.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_deque.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/initializer_list \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/range_access.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/deque.tcc \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/vector \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_vector.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_bvector.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/functional_hash.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/hash_bytes.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/vector.tcc \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_heap.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_function.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/backward/binders.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_queue.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/uses_allocator.h \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/utility \
-  C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_relops.h
+  C:/MinGW/include/oleidl.h
 
 CMakeFiles/PacManProject.dir/colours.cpp.obj: C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/colours.cpp \
   C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/colours.h \
@@ -207,8 +158,6 @@ CMakeFiles/PacManProject.dir/colours.cpp.obj: C:/Users/Hendrix/CLionProjects/APS
 
 C:/MinGW/include/rpcnsip.h:
 
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_algobase.h:
-
 C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/apsc143project.cpp:
 
 C:/MinGW/include/basetyps.h:
@@ -243,8 +192,6 @@ C:/MinGW/include/poppack.h:
 
 C:/MinGW/include/sys/types.h:
 
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/hash_bytes.h:
-
 C:/MinGW/lib/gcc/mingw32/6.3.0/include/stdarg.h:
 
 C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32/bits/c++config.h:
@@ -267,8 +214,6 @@ C:/MinGW/include/rpcdce.h:
 
 C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/colours.h:
 
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32/bits/c++allocator.h:
-
 C:/MinGW/include/wchar.h:
 
 C:/MinGW/include/windows.h:
@@ -280,8 +225,6 @@ C:/MinGW/include/windef.h:
 C:/MinGW/include/winnt.h:
 
 C:/MinGW/include/winerror.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/debug/debug.h:
 
 C:/MinGW/include/winnls.h:
 
@@ -315,13 +258,9 @@ C:/MinGW/include/winver.h:
 
 C:/MinGW/include/winnetwk.h:
 
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/functexcept.h:
-
 C:/MinGW/include/rpcnterr.h:
 
 C:/MinGW/include/cderr.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_iterator_base_types.h:
 
 C:/MinGW/include/dde.h:
 
@@ -332,8 +271,6 @@ C:/MinGW/include/imm.h:
 C:/MinGW/include/lzexpand.h:
 
 C:/MinGW/include/unknwn.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/queue:
 
 C:/MinGW/include/mmsystem.h:
 
@@ -347,13 +284,9 @@ C:/MinGW/include/winperf.h:
 
 C:/MinGW/include/commdlg.h:
 
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/uses_allocator.h:
-
 C:/MinGW/include/rpcndr.h:
 
 C:/MinGW/include/prsht.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_construct.h:
 
 C:/MinGW/include/sys/bsdtypes.h:
 
@@ -373,86 +306,6 @@ C:/MinGW/include/oleauto.h:
 
 C:/MinGW/include/oaidl.h:
 
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/ptr_traits.h:
-
 C:/MinGW/include/oleidl.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/deque:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/exception_defines.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/cpp_type_traits.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/ext/type_traits.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/ext/numeric_traits.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_pair.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/move.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/concept_check.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/type_traits:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_iterator_base_funcs.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/debug/assertions.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_iterator.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/predefined_ops.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/allocator.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/ext/new_allocator.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/new:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/deque.tcc:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/exception:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/atomic_lockfree_defines.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/exception_ptr.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/nested_exception.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/memoryfwd.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/ext/alloc_traits.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/alloc_traits.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_uninitialized.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_deque.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/initializer_list:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/range_access.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/vector:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_vector.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_bvector.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/functional_hash.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/vector.tcc:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_heap.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_function.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/backward/binders.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_queue.h:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/utility:
-
-C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/bits/stl_relops.h:
 
 C:/Users/Hendrix/CLionProjects/APSC143Final-Project/PacManProject/colours.cpp:

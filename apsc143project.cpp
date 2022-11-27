@@ -98,7 +98,7 @@ void printMap(char **map, const int rows, const int cols, const int pacManPos[2]
 
 // compute the minimum distance to pac man from position on the map (i, j) using depth-first-search
 // returns a 2d array of ints {dist, direction index}
-int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, int pacManPos[2], int dirs[4][2]){
+int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, const int pacManPos[2], int dirs[4][2]){
     if(isWall(map, i, j) || vis[i][j] == 1)
         return 1e5;
     if(i == pacManPos[0] && j == pacManPos[1])
@@ -118,7 +118,7 @@ int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, int pacManPos[2]
 }
 
 // move ghost in direction of shortest path to pac man
-void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], int ghostPos[2], int pacManPos[2]){
+void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManPos[2], int ghostPos[2]){
     int minDist = 1e9, dirIdx = 0, dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // {up, down, left, right}
     int vis[ROWS][COLS];
 
@@ -194,7 +194,7 @@ int loseCheck(int pacManPos[2], int ghostPos[NUM_GHOSTS][2]){
     char strDirs[5][10] = {"Above", "Below", "Left", "Right", "Contact"};
     for(int i = 0; i < 5; ++i){
         if(isGhost(ghostPos, pacManPos[0] + dirs[i][0], pacManPos[1] + dirs[i][1])){
-            puts(strDirs[i]);
+            // puts(strDirs[i]);
             return 1;
         }
     }
