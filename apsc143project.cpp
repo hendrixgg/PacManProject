@@ -1,5 +1,5 @@
 // APSC 143 Engineering Programming Project Starter Code
-// Feel free to change anything about this file, but do not remove "#include "colours.h".
+// Feel free to change anything about this file, but do not remove "#include "colours.h"".
 
 // Make sure to include all relevant libraries
 #include <stdio.h>
@@ -201,7 +201,7 @@ int loseCheck(int pacManPos[2], int ghostPos[NUM_GHOSTS][2]){
     return 0;
 }
 
-// recieves input from the user and only returns the key if it would have an effect on the game
+// receives input from the user and only returns the key if it would have an effect on the game
 char input(){
     char key;
     do{
