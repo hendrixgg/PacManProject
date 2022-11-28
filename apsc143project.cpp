@@ -225,9 +225,8 @@ char input(){
 int main() {
     int pacManPos[2], ghostPos[2][2], dotsRemaining;
     char **map, key = 0;
-    
     // load the map array (11 rows, 11 cols) of characters, and get initial PacMan and Ghost positions
-    int status = initGame("../map.txt", &map, ROWS + 2, COLS + 2, pacManPos, ghostPos, &dotsRemaining);
+    int status = initGame("../map.txt", &map, ROWS, COLS, pacManPos, ghostPos, &dotsRemaining);
 
     while(status > 0){
         printf("press 'q' or esc to exit the game\n");
@@ -239,7 +238,7 @@ int main() {
             break;
 
         // move ghosts
-        // determine direction of movement (line of sight, or random, or Breadth-First-Search from ghost to pacman)
+        // determine direction of movement (Breadth-First-Search from ghost to pacman)
         // printf("ghosts: (%d, %d) (%d, %d)\n", ghostPos[0][0], ghostPos[0][1], ghostPos[1][0], ghostPos[1][1]);
         // printf("pac man: (%d, %d)\n", pacManPos[0], pacManPos[1]);
         for(int i = 0; i < NUM_GHOSTS; ++i){
@@ -249,15 +248,18 @@ int main() {
 
         // move PacMan
         movePacman(key, map, pacManPos);
-        // collect a pellet if PacMan lands on one
-        dotsRemaining -= removeDot(map, pacManPos);
 
         // clear the console
         system("CLS");
 
         // check if won/lost -> if yes: break the loop and print game over condition to user
-        if(winCheck(dotsRemaining) || loseCheck(pacManPos, ghostPos)) 
-            break;
+        if(loseCheck(pacManPos, ghostPos)) break;
+        
+        // collect a pellet if PacMan landed on one
+        // this happens after loseCheck because we don't want to collect a dot if the game was lost
+        dotsRemaining -= removeDot(map, pacManPos);
+
+        if(winCheck(dotsRemaining)) break;
     }
 
     if(key == ESC || key == 'q' || key == 'Q'){
