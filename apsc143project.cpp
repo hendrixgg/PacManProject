@@ -55,7 +55,7 @@ int distToPacMan(char **map, const int row, const int col, const int pacManPos[2
 void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManPos[2], int ghostPos[2]);
 
 // Changes PacMan's position based on key input if the new position is not a wall.
-void movePacman(char key, char **map, int pacManPos[2]);
+void movePacman(int key, char **map, int pacManPos[2]);
 
 // Remove dot from map if PacMan is on a dot
 // returns 1 if dot removed, 0 otherwise
