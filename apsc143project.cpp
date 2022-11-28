@@ -147,7 +147,7 @@ void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManP
 
     for(int i = 0; i < 4; ++i) {
         if(isWall(map, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1]) || isGhost(allGhosts, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1])) continue;
-        int dist = distToPacMan(map, vis, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1], pacManPos, dirs);
+        int dist = 1 + distToPacMan(map, vis, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1], pacManPos, dirs);
         if(dist < minDist)
             dirIdx = i, minDist = dist;
     }
