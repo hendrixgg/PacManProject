@@ -66,7 +66,7 @@ int loseCheck(int pacManPos[2], int ghostPos[NUM_GHOSTS][2]);
 int input();
 
 int main() {
-    int pacManPos[2], ghostPos[2][2], dotsRemaining, key = 0;
+    int pacManPos[2], ghostPos[2][2], dotsRemaining, key;
     char **map;
     // load the map array (11 rows, 11 cols) of characters, and get initial PacMan and Ghost positions
     int status = initGame("../map.txt", &map, ROWS, COLS, pacManPos, ghostPos, &dotsRemaining);
