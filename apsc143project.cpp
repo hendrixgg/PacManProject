@@ -14,8 +14,8 @@
 #define WALL 'W'
 #define EMPTY ' '
 #define UP 'w'
-#define LEFT 'a'
 #define DOWN 's'
+#define LEFT 'a'
 #define RIGHT 'd'
 #define ESC 27
 
@@ -63,11 +63,11 @@ int winCheck(int dotsRemaining);
 int loseCheck(int pacManPos[2], int ghostPos[NUM_GHOSTS][2]);
 
 // receives input from the user and only returns the key if it would have an effect on the game
-char input();
+int input();
 
 int main() {
-    int pacManPos[2], ghostPos[2][2], dotsRemaining;
-    char **map, key = 0;
+    int pacManPos[2], ghostPos[2][2], dotsRemaining, key = 0;
+    char **map;
     // load the map array (11 rows, 11 cols) of characters, and get initial PacMan and Ghost positions
     int status = initGame("../map.txt", &map, ROWS, COLS, pacManPos, ghostPos, &dotsRemaining);
 
@@ -235,40 +235,24 @@ void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManP
 }
 
 // Changes PacMan's position based on key input if the new position is not a wall.
-void movePacman(char key, char **map, int pacManPos[2]){
+void movePacman(int key, char **map, int pacManPos[2]){
     switch (key){
-        case UP: {
-            if(isWall(map,pacManPos[0]-1,pacManPos[1])){
-                break;
-            }else{
+        case UP:
+            if(!isWall(map, pacManPos[0]-1, pacManPos[1]))
                 --pacManPos[0];
-            }
             break;
-        }
-        case DOWN: {
-            if(isWall(map,pacManPos[0]+1,pacManPos[1])){
-                break;
-            }else{
+        case DOWN:
+            if(!isWall(map, pacManPos[0]+1, pacManPos[1]))
                 ++pacManPos[0];
-            }
             break;
-        }
-        case RIGHT: {
-            if(isWall(map,pacManPos[0],pacManPos[1]+1)){
-                break;
-            }else{
+        case RIGHT:
+            if(!isWall(map, pacManPos[0], pacManPos[1]+1))
                 ++pacManPos[1];
-            }
             break;
-        }
-        case LEFT: {
-            if(isWall(map,pacManPos[0],pacManPos[1]-1)){
-                break;
-            }else{
+        case LEFT:
+            if(!isWall(map, pacManPos[0], pacManPos[1]-1))
                 --pacManPos[1];
-            }
             break;
-        }
     }
 }
 
@@ -304,8 +288,8 @@ int loseCheck(int pacManPos[2], int ghostPos[NUM_GHOSTS][2]){
 }
 
 // receives input from the user and only returns the key if it would have an effect on the game
-char input(){
-    char key;
+int input(){
+    int key;
     do{
         key = getch();
     }while(!(key == UP || key == DOWN || key == LEFT || key == RIGHT || key == ESC || key == 'q' || key == 'Q'));
