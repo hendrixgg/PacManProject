@@ -19,10 +19,14 @@
 #define RIGHT 'd'
 #define ESC 27
 
-// game constants
-#define COLS 11
-#define ROWS 11
+// map.txt constants
+#define MAP_ROWS 9
+#define MAP_COLS 9
 #define NUM_GHOSTS 2
+
+// game constants
+#define ROWS MAP_ROWS+2
+#define COLS MAP_COLS+2
 
 // returns 1 if the tile specified is a wall tile or out of bounds, 0 if not.
 int isWall(char **map, const int row, const int col){
@@ -46,10 +50,17 @@ int initGame(const char *mapFilePath, char ***map, const int rows, const int col
         fclose(mapFile);
         return 0;
     }
+
+    // allocate map memory
     *map = (char **)malloc(rows*sizeof(char*)), *dots = 0;
-    for(int i = 0, numGhosts = 0; i < rows; ++i) {
+    // initialize with WALLs
+    for(int i = 0; i < rows; ++i){
         (*map)[i] = (char *) malloc(cols * sizeof(char));
-        for(int j = 0; j < cols; ++j){
+        memset((*map)[i], WALL, cols * sizeof(char));
+    }
+
+    for(int i = 1, numGhosts = 0; i < rows-1; ++i) {
+        for(int j = 1; j < cols-1; ++j){
             // read input and check for error
             if(fscanf(mapFile, "%c ", &(*map)[i][j]) == EOF){
                 printf("error reading %s: reached end of file\n", mapFilePath);
@@ -207,15 +218,16 @@ char input(){
     do{
         key = getch();
     }while(!(key == UP || key == DOWN || key == LEFT || key == RIGHT || key == ESC || key == 'q' || key == 'Q'));
-    // printf("input: %d, %c\n", key, key);
+    printf("input: %d, %c\n", key, key);
     return key;
 }
 
 int main() {
     int pacManPos[2], ghostPos[2][2], dotsRemaining;
     char **map, key = 0;
+    
     // load the map array (11 rows, 11 cols) of characters, and get initial PacMan and Ghost positions
-    int status = initGame("../map.txt", &map, ROWS, COLS, pacManPos, ghostPos, &dotsRemaining);
+    int status = initGame("../map.txt", &map, ROWS + 2, COLS + 2, pacManPos, ghostPos, &dotsRemaining);
 
     while(status > 0){
         printf("press 'q' or esc to exit the game\n");
