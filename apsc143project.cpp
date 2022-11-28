@@ -121,7 +121,7 @@ int main() {
 }
 
 // returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
-int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, const int pacManPos[2], int dirs[4][2]){
+int distToPacManRecur(char **map, int vis[ROWS][COLS], int i, int j, const int pacManPos[2], const int dirs[4][2]){
     if(isWall(map, i, j) || vis[i][j] == 1)
         return 1e5;
     if(i == pacManPos[0] && j == pacManPos[1])
@@ -131,7 +131,7 @@ int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, const int pacMan
 
     int minDist = 1e9;
     for(int k = 0; k < 4; ++k) {
-        int dist = distToPacMan(map, vis, i + dirs[k][0], j + dirs[k][1], pacManPos, dirs);
+        int dist = distToPacManRecur(map, vis, i + dirs[k][0], j + dirs[k][1], pacManPos, dirs);
         if(dist < minDist)
             minDist = dist;
     }
@@ -140,14 +140,22 @@ int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, const int pacMan
     return 1 + minDist;
 }
 
+// returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
+int distToPacMan(char **map, int i, int j, const int pacManPos[2], const int dirs[4][2]){
+    int vis[ROWS][COLS];
+    for(int i = 0; i < ROWS; ++i) 
+        memset(vis[i], 0, COLS*sizeof(vis[0][0]));
+    return distToPacManRecur(map, vis, i, j, pacManPos, dirs);
+}
+
 // move ghost in direction of the shortest path to pac man
 void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManPos[2], int ghostPos[2]){
-    int minDist = 1e9, dirIdx = 0, dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // {up, down, left, right}
-    int vis[ROWS][COLS];
+    const int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // {up, down, left, right}
+    int minDist = 1e9, dirIdx = 0;
 
     for(int i = 0; i < 4; ++i) {
         if(isWall(map, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1]) || isGhost(allGhosts, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1])) continue;
-        int dist = 1 + distToPacMan(map, vis, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1], pacManPos, dirs);
+        int dist = 1 + distToPacMan(map, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1], pacManPos, dirs);
         if(dist < minDist)
             dirIdx = i, minDist = dist;
     }
