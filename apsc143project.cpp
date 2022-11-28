@@ -41,8 +41,7 @@ int initGame(const char *mapFilePath, char ***map, const int rows, const int col
 // prints the map and entities with different colours to the console
 void printMap(char **map, const int rows, const int cols, const int pacManPos[2], const int ghostPos[2][2]);
 
-// compute the minimum distance to pac man from position on the map (i, j) using depth-first-search
-// returns a 2d array of ints {dist, direction index}
+// returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
 int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, const int pacManPos[2], int dirs[4][2]);
 
 // move ghost in direction of the shortest path to pac man
@@ -200,8 +199,7 @@ void printMap(char **map, const int rows, const int cols, const int pacManPos[2]
     colourChange(WHITE);
 }
 
-// compute the minimum distance to pac man from position on the map (i, j) using depth-first-search
-// returns a 2d array of ints {dist, direction index}
+// returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
 int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, const int pacManPos[2], int dirs[4][2]){
     if(isWall(map, i, j) || vis[i][j] == 1)
         return 1e5;
@@ -311,6 +309,6 @@ char input(){
     do{
         key = getch();
     }while(!(key == UP || key == DOWN || key == LEFT || key == RIGHT || key == ESC || key == 'q' || key == 'Q'));
-    printf("input: %d, %c\n", key, key);
+    // printf("input: %d, %c\n", key, key);
     return key;
 }
