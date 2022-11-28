@@ -120,85 +120,6 @@ int main() {
     return 0;
 }
 
-// returns 1 if the tile specified is a wall tile or out of bounds, 0 if not.
-int isWall(char **map, const int row, const int col){
-    return row < 0 || ROWS <= row || col < 0 || COLS <= col || map[row][col] == WALL;
-}
-
-// returns 1 if the tile specified contains a ghost, 0 if not
-int isGhost(const int ghostPos[NUM_GHOSTS][2], const int row, const int col){
-    for(int i = 0; i < NUM_GHOSTS; ++i)
-        if(row == ghostPos[i][0] && col == ghostPos[i][1])
-            return 1;
-    return 0;
-}
-
-// initializes the map and the entity positions
-// returns 1 if successful, 0 if the mapfile could not be opened, and -1 if the end of file was reached before the expected amount of input had been read
-int initGame(const char *mapFilePath, char ***map, const int rows, const int cols, int pacManPos[2], int ghostPos[2][2], int *dots){
-    FILE* mapFile = fopen(mapFilePath, "r");
-    if(mapFile == NULL){
-        printf("error opening %s: No such file or directory\n", mapFilePath);
-        fclose(mapFile);
-        return 0;
-    }
-
-    // allocate map memory
-    *map = (char **)malloc(rows*sizeof(char*)), *dots = 0;
-    // initialize with WALLs
-    for(int i = 0; i < rows; ++i){
-        (*map)[i] = (char *) malloc(cols * sizeof(char));
-        memset((*map)[i], WALL, cols * sizeof(char));
-    }
-
-    for(int i = 1, numGhosts = 0; i < rows-1; ++i) {
-        for(int j = 1; j < cols-1; ++j){
-            // read input and check for error
-            if(fscanf(mapFile, "%c ", &(*map)[i][j]) == EOF){
-                printf("error reading %s: reached end of file\n", mapFilePath);
-                fclose(mapFile);
-                return -1;
-            }
-            if((*map)[i][j] == PACMAN) {
-                (*map)[i][j] = EMPTY;
-                pacManPos[0] = i, pacManPos[1] = j;
-            }else if((*map)[i][j] == GHOST){
-                // assuming that a ghost is covering a dot
-                (*map)[i][j] = DOT, ++*dots;
-                ghostPos[numGhosts][0] = i, ghostPos[numGhosts][1] = j, ++numGhosts;
-            }else if((*map)[i][j] == DOT){
-                ++*dots;
-            }
-        }
-    }
-    fclose(mapFile);
-    return 1;
-}
-
-// prints the map and entities with different colours to the console
-void printMap(char **map, const int rows, const int cols, const int pacManPos[2], const int ghostPos[2][2]){
-    for(int i = 0; i < rows; ++i){
-        colourChange(BLUE);
-        printf("%c", map[i][0]);
-        for(int j = 1; j < cols; ++j){
-            char c = map[i][j];
-            if(isGhost(ghostPos, i, j)){
-                c = GHOST;
-                colourChange(PINK);
-            } else if(i == pacManPos[0] && j == pacManPos[1]){
-                c = PACMAN;
-                colourChange(YELLOW);
-            } else if (c == WALL)
-                colourChange(BLUE);
-            else // if c == DOT
-                colourChange(WHITE);
-            printf("  %c", c);
-        }
-        puts("");
-    }
-    colourChange(WHITE);
-}
-
 // returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
 int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, const int pacManPos[2], int dirs[4][2]){
     if(isWall(map, i, j) || vis[i][j] == 1)
@@ -295,4 +216,83 @@ int input(){
     // printf("input: %d, %c\n", key, key);
     }while(!(key == UP || key == DOWN || key == LEFT || key == RIGHT || key == ESC || key == 'q' || key == 'Q'));
     return key;
+}
+
+// returns 1 if the tile specified is a wall tile or out of bounds, 0 if not.
+int isWall(char **map, const int row, const int col){
+    return row < 0 || ROWS <= row || col < 0 || COLS <= col || map[row][col] == WALL;
+}
+
+// returns 1 if the tile specified contains a ghost, 0 if not
+int isGhost(const int ghostPos[NUM_GHOSTS][2], const int row, const int col){
+    for(int i = 0; i < NUM_GHOSTS; ++i)
+        if(row == ghostPos[i][0] && col == ghostPos[i][1])
+            return 1;
+    return 0;
+}
+
+// initializes the map and the entity positions
+// returns 1 if successful, 0 if the mapfile could not be opened, and -1 if the end of file was reached before the expected amount of input had been read
+int initGame(const char *mapFilePath, char ***map, const int rows, const int cols, int pacManPos[2], int ghostPos[2][2], int *dots){
+    FILE* mapFile = fopen(mapFilePath, "r");
+    if(mapFile == NULL){
+        printf("error opening %s: No such file or directory\n", mapFilePath);
+        fclose(mapFile);
+        return 0;
+    }
+
+    // allocate map memory
+    *map = (char **)malloc(rows*sizeof(char*)), *dots = 0;
+    // initialize with WALLs
+    for(int i = 0; i < rows; ++i){
+        (*map)[i] = (char *) malloc(cols * sizeof(char));
+        memset((*map)[i], WALL, cols * sizeof(char));
+    }
+
+    for(int i = 1, numGhosts = 0; i < rows-1; ++i) {
+        for(int j = 1; j < cols-1; ++j){
+            // read input and check for error
+            if(fscanf(mapFile, "%c ", &(*map)[i][j]) == EOF){
+                printf("error reading %s: reached end of file\n", mapFilePath);
+                fclose(mapFile);
+                return -1;
+            }
+            if((*map)[i][j] == PACMAN) {
+                (*map)[i][j] = EMPTY;
+                pacManPos[0] = i, pacManPos[1] = j;
+            }else if((*map)[i][j] == GHOST){
+                // assuming that a ghost is covering a dot
+                (*map)[i][j] = DOT, ++*dots;
+                ghostPos[numGhosts][0] = i, ghostPos[numGhosts][1] = j, ++numGhosts;
+            }else if((*map)[i][j] == DOT){
+                ++*dots;
+            }
+        }
+    }
+    fclose(mapFile);
+    return 1;
+}
+
+// prints the map and entities with different colours to the console
+void printMap(char **map, const int rows, const int cols, const int pacManPos[2], const int ghostPos[2][2]){
+    for(int i = 0; i < rows; ++i){
+        colourChange(BLUE);
+        printf("%c", map[i][0]);
+        for(int j = 1; j < cols; ++j){
+            char c = map[i][j];
+            if(isGhost(ghostPos, i, j)){
+                c = GHOST;
+                colourChange(PINK);
+            } else if(i == pacManPos[0] && j == pacManPos[1]){
+                c = PACMAN;
+                colourChange(YELLOW);
+            } else if (c == WALL)
+                colourChange(BLUE);
+            else // if c == DOT
+                colourChange(WHITE);
+            printf("  %c", c);
+        }
+        puts("");
+    }
+    colourChange(WHITE);
 }
