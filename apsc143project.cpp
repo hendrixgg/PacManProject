@@ -42,7 +42,10 @@ int initGame(const char *mapFilePath, char ***map, const int rows, const int col
 void printMap(char **map, const int rows, const int cols, const int pacManPos[2], const int ghostPos[2][2]);
 
 // returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
-int distToPacMan(char **map, int vis[ROWS][COLS], int i, int j, const int pacManPos[2], int dirs[4][2]);
+int distToPacManRecur(char **map, int vis[ROWS][COLS], int i, int j, const int pacManPos[2], const int dirs[4][2]);
+
+// returns the minimum distance to pac man from position on the map (i, j) by calling distToPacManRecur
+int distToPacMan(char **map, int i, int j, const int pacManPos[2], int dirs[4][2]);
 
 // move ghost in direction of the shortest path to pac man
 void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManPos[2], int ghostPos[2]);
@@ -153,13 +156,17 @@ void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManP
     const int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // {up, down, left, right}
     int minDist = 1e9, dirIdx = 0;
 
+    // for each direction the ghost can move
     for(int i = 0; i < 4; ++i) {
-        if(isWall(map, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1]) || isGhost(allGhosts, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1])) continue;
-        int dist = 1 + distToPacMan(map, ghostPos[0] + dirs[i][0], ghostPos[1] + dirs[i][1], pacManPos, dirs);
+        const int row = ghostPos[0] + dirs[i][0], col = ghostPos[1] + dirs[i][1];
+        if(isWall(map, row, col) || isGhost(allGhosts, row, col)) continue;
+        // if this is a valid move, compute distance to pac man
+        int dist = 1 + distToPacMan(map, row, col, pacManPos, dirs);
+        // if this is the smallest distance, save the direction
         if(dist < minDist)
             dirIdx = i, minDist = dist;
     }
-
+    // move the ghost
     ghostPos[0] += dirs[dirIdx][0], ghostPos[1] += dirs[dirIdx][1];
 }
 
