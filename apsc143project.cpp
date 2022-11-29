@@ -124,28 +124,29 @@ int main() {
 }
 
 // returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
-int distToPacManRecur(char **map, int vis[ROWS][COLS], int i, int j, const int pacManPos[2], const int dirs[4][2]){
-    if(isWall(map, i, j) || vis[i][j] == 1)
-        return 1e5;
-    if(i == pacManPos[0] && j == pacManPos[1])
+int distToPacManRecur(char **map, char vis[ROWS][COLS], int row, int col, const int pacManPos[2], const int dirs[4][2]){
+    if(row == pacManPos[0] && col == pacManPos[1])
         return 0;
 
-    vis[i][j] = 1;
+    vis[row][col] = 1;
 
     int minDist = 1e9;
     for(int k = 0; k < 4; ++k) {
-        int dist = distToPacManRecur(map, vis, i + dirs[k][0], j + dirs[k][1], pacManPos, dirs);
+        int newRow = row + dirs[k][0], newCol = col + dirs[k][1];
+        if(isWall(map, newRow, newCol) || vis[newRow][newCol]) continue;
+        // if this is a valid move, compute distance to pac man
+        int dist = distToPacManRecur(map, vis, newRow, newCol, pacManPos, dirs);
         if(dist < minDist)
             minDist = dist;
     }
 
-    vis[i][j] = 0;
+    vis[row][col] = 0;
     return 1 + minDist;
 }
 
 // returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
 int distToPacMan(char **map, int i, int j, const int pacManPos[2], const int dirs[4][2]){
-    int vis[ROWS][COLS];
+    char vis[ROWS][COLS];
     for(int i = 0; i < ROWS; ++i) 
         memset(vis[i], 0, COLS*sizeof(vis[0][0]));
     return distToPacManRecur(map, vis, i, j, pacManPos, dirs);
