@@ -35,7 +35,7 @@ int keyDir[1<<8]{0};
 // game variables
 int pacManPos[2], ghostPos[NUM_GHOSTS][2], dotsRemaining, status;
 char **map;
-bool vis[ROWS][COLS]{0}; // for distance to pacman
+bool vis[ROWS][COLS]{false}; // for distanceToPacman function
 
 // returns 1 if the tile specified is a wall tile or out of bounds, 0 if not.
 int isWall(const int row, const int col){
