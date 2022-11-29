@@ -162,8 +162,7 @@ void movePacman(int key){
 // returns 1 if dot removed, 0 otherwise
 int removeDot(){
     if(map[pacManPos[0]][pacManPos[1]] == DOT){
-        map[pacManPos[0]][pacManPos[1]] = EMPTY;
-        --dotsRemaining;
+        map[pacManPos[0]][pacManPos[1]] = EMPTY, --dotsRemaining;
         return 1;
     }
     return 0;
@@ -178,21 +177,16 @@ int winCheck(){
 // If Pacman hits a ghost, he loses.
 // returns 1 if the game is lost, 0 otherwise
 int loseCheck(){
-    // differences in position a ghost can have from pac man that are losing
-    for(int i = 0; i < 5; ++i){
-        if(isGhost(pacManPos[0] + dirs[i][0], pacManPos[1] + dirs[i][1])){
+    for(int i = 0; i < 5; ++i)
+        if(isGhost(pacManPos[0] + dirs[i][0], pacManPos[1] + dirs[i][1]))
             return 1;
-        }
-    }
     return 0;
 }
 
 // receives input from the user and only returns the key if it would have an effect on the game
 int input(){
     int key;
-    do{
-        key = getch();
-    }while(!(key == UP || key == DOWN || key == LEFT || key == RIGHT));
+    do{key = getch();}while(!(key == UP || key == DOWN || key == LEFT || key == RIGHT));
     return key;
 }
 
