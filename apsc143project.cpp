@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "colours.h"
 
 // You don't need to use these, but they help make your code look more organized
@@ -17,6 +18,7 @@
 #define DOWN 's'
 #define LEFT 'a'
 #define RIGHT 'd'
+#define START 4
 #define ESC 27
 
 // map.txt constants
@@ -25,222 +27,23 @@
 #define NUM_GHOSTS 2
 
 // game constants
-#define ROWS MAP_ROWS+2
-#define COLS MAP_COLS+2
+#define ROWS (MAP_ROWS+2)
+#define COLS (MAP_COLS+2)
+const int dirs[5][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, 0}}; // {up, down, left, right, contact}
+int keyDir[1<<8]{0};
+
+// game variables
+int pacManPos[2], ghostPos[NUM_GHOSTS][2], dotsRemaining, status;
+char **map;
+bool vis[ROWS][COLS]{0}; // for distance to pacman
 
 // returns 1 if the tile specified is a wall tile or out of bounds, 0 if not.
-int isWall(char **map, const int row, const int col);
-
-// returns 1 if the tile specified contains a ghost, 0 if not
-int isGhost(const int ghostPos[NUM_GHOSTS][2], const int row, const int col);
-
-// initializes the map and the entity positions
-// returns 1 if successful, 0 if the mapfile could not be opened, and -1 if the end of file was reached before the expected amount of input had been read
-int initGame(const char *mapFilePath, char ***map, const int rows, const int cols, int pacManPos[2], int ghostPos[2][2], int *dots);
-
-// prints the map and entities with different colours to the console
-void printMap(char **map, const int rows, const int cols, const int pacManPos[2], const int ghostPos[2][2]);
-
-// returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
-int distToPacManRecur(char **map, int vis[ROWS][COLS], int i, int j, const int pacManPos[2], const int dirs[4][2]);
-
-// returns the minimum distance to pac man from position on the map (i, j) by calling distToPacManRecur
-int distToPacMan(char **map, int i, int j, const int pacManPos[2], int dirs[4][2]);
-
-// move ghost in direction of the shortest path to pac man
-void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManPos[2], int ghostPos[2]);
-
-// Changes PacMan's position based on key input if the new position is not a wall.
-void movePacman(int key, char **map, int pacManPos[2]);
-
-// Remove dot from map if PacMan is on a dot
-// returns 1 if dot removed, 0 otherwise
-int removeDot(char **map, int pacManPos[2]);
-
-// Check if PacMan has won if the dots remaining are equal to zero.
-// returns 1 if the game is won, 0 otherwise
-int winCheck(int dotsRemaining);
-
-// If Pacman hits a ghost, he loses.
-// returns 1 if the game is lost, 0 otherwise
-int loseCheck(int pacManPos[2], int ghostPos[NUM_GHOSTS][2]);
-
-// receives input from the user and only returns the key if it would have an effect on the game
-int input();
-
-int main() {
-    int pacManPos[2], ghostPos[2][2], dotsRemaining, key;
-    char **map;
-    // load the map array (11 rows, 11 cols) of characters, and get initial PacMan and Ghost positions
-    int status = initGame("../map.txt", &map, ROWS, COLS, pacManPos, ghostPos, &dotsRemaining);
-
-    while(status > 0){
-        printf("press 'q' or esc to exit the game\n");
-        printMap(map, ROWS, COLS, pacManPos, ghostPos);
-
-        // input
-        key = input();
-        if(key == ESC || key == 'q' || key == 'Q')
-            break;
-
-        // move ghosts
-        // determine direction of movement (Breadth-First-Search from ghost to pacman)
-        // printf("ghosts: (%d, %d) (%d, %d)\n", ghostPos[0][0], ghostPos[0][1], ghostPos[1][0], ghostPos[1][1]);
-        // printf("pac man: (%d, %d)\n", pacManPos[0], pacManPos[1]);
-        for(int i = 0; i < NUM_GHOSTS; ++i){
-            // printf("ghost %d: \n", i);
-            moveGhost(map, ghostPos, pacManPos, ghostPos[i]);
-        }
-
-        // move PacMan
-        movePacman(key, map, pacManPos);
-
-        // clear the console
-        system("CLS");
-
-        // check if won/lost -> if yes: break the loop and print game over condition to user
-        if(loseCheck(pacManPos, ghostPos)) break;
-        
-        // collect a pellet if PacMan landed on one
-        // this happens after loseCheck because we don't want to collect a dot if the game was lost
-        dotsRemaining -= removeDot(map, pacManPos);
-
-        if(winCheck(dotsRemaining)) break;
-    }
-
-    if(key == ESC || key == 'q' || key == 'Q'){
-        printf("You ended the game. Press any key to exit the game\n");
-    } else if(dotsRemaining > 0){
-        printMap(map, ROWS, COLS, pacManPos, ghostPos);
-        // printf("pacman(%d, %d), ghosts(%d, %d), (%d, %d)\n", pacManPos[0], pacManPos[1], ghostPos[0][0], ghostPos[0][1], ghostPos[1][0], ghostPos[1][1]);
-        printf("Sorry, you lose. Press any key to exit the game\n");
-    } else {
-        printMap(map, ROWS, COLS, pacManPos, ghostPos);
-        printf("Congratulations! You win! Press any key to exit the game\n");
-    }
-    getch();
-    free(map);
-    return 0;
-}
-
-// returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
-int distToPacManRecur(char **map, char vis[ROWS][COLS], int row, int col, const int pacManPos[2], const int dirs[4][2]){
-    if(row == pacManPos[0] && col == pacManPos[1])
-        return 0;
-
-    vis[row][col] = 1;
-
-    int minDist = 1e9;
-    for(int k = 0; k < 4; ++k) {
-        int newRow = row + dirs[k][0], newCol = col + dirs[k][1];
-        if(isWall(map, newRow, newCol) || vis[newRow][newCol]) continue;
-        // if this is a valid move, compute distance to pac man
-        int dist = distToPacManRecur(map, vis, newRow, newCol, pacManPos, dirs);
-        if(dist < minDist)
-            minDist = dist;
-    }
-
-    vis[row][col] = 0;
-    return 1 + minDist;
-}
-
-// returns the minimum distance to pac man from position on the map (i, j) using depth-first-search
-int distToPacMan(char **map, int i, int j, const int pacManPos[2], const int dirs[4][2]){
-    char vis[ROWS][COLS];
-    for(int i = 0; i < ROWS; ++i) 
-        memset(vis[i], 0, COLS*sizeof(vis[0][0]));
-    return distToPacManRecur(map, vis, i, j, pacManPos, dirs);
-}
-
-// move ghost in direction of the shortest path to pac man
-void moveGhost(char **map, const int allGhosts[NUM_GHOSTS][2], const int pacManPos[2], int ghostPos[2]){
-    const int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // {up, down, left, right}
-    int minDist = 1e9, dirIdx = 0;
-
-    // for each direction the ghost can move
-    for(int i = 0; i < 4; ++i) {
-        const int row = ghostPos[0] + dirs[i][0], col = ghostPos[1] + dirs[i][1];
-        if(isWall(map, row, col) || isGhost(allGhosts, row, col)) continue;
-        // if this is a valid move, compute distance to pac man
-        int dist = 1 + distToPacMan(map, row, col, pacManPos, dirs);
-        // if this is the smallest distance, save the direction
-        if(dist < minDist)
-            dirIdx = i, minDist = dist;
-    }
-    // move the ghost
-    ghostPos[0] += dirs[dirIdx][0], ghostPos[1] += dirs[dirIdx][1];
-}
-
-// Changes PacMan's position based on key input if the new position is not a wall.
-void movePacman(int key, char **map, int pacManPos[2]){
-    switch (key){
-        case UP:
-            if(!isWall(map, pacManPos[0]-1, pacManPos[1]))
-                --pacManPos[0];
-            break;
-        case DOWN:
-            if(!isWall(map, pacManPos[0]+1, pacManPos[1]))
-                ++pacManPos[0];
-            break;
-        case RIGHT:
-            if(!isWall(map, pacManPos[0], pacManPos[1]+1))
-                ++pacManPos[1];
-            break;
-        case LEFT:
-            if(!isWall(map, pacManPos[0], pacManPos[1]-1))
-                --pacManPos[1];
-            break;
-    }
-}
-
-// Remove dot from map if PacMan is on a dot
-// returns 1 if dot removed, 0 otherwise
-int removeDot(char **map, int pacManPos[2]){
-    if(map[pacManPos[0]][pacManPos[1]] == DOT){
-        map[pacManPos[0]][pacManPos[1]] = EMPTY;
-        return 1;
-    }
-    return 0;
-}
-
-// Check if PacMan has won if the dots remaining are equal to zero.
-// returns 1 if the game is won, 0 otherwise
-int winCheck(int dotsRemaining){
-    return dotsRemaining == 0;
-}
-
-// If Pacman hits a ghost, he loses.
-// returns 1 if the game is lost, 0 otherwise
-int loseCheck(int pacManPos[2], int ghostPos[NUM_GHOSTS][2]){
-    // differences in position a ghost can have from pac man that are losing
-    int dirs[5][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, 0}}; // {up, down, left, right, contact}
-    char strDirs[5][10] = {"Above", "Below", "Left", "Right", "Contact"};
-    for(int i = 0; i < 5; ++i){
-        if(isGhost(ghostPos, pacManPos[0] + dirs[i][0], pacManPos[1] + dirs[i][1])){
-            // puts(strDirs[i]);
-            return 1;
-        }
-    }
-    return 0;
-}
-
-// receives input from the user and only returns the key if it would have an effect on the game
-int input(){
-    int key;
-    do{
-        key = getch();
-    // printf("input: %d, %c\n", key, key);
-    }while(!(key == UP || key == DOWN || key == LEFT || key == RIGHT || key == ESC || key == 'q' || key == 'Q'));
-    return key;
-}
-
-// returns 1 if the tile specified is a wall tile or out of bounds, 0 if not.
-int isWall(char **map, const int row, const int col){
+int isWall(const int row, const int col){
     return row < 0 || ROWS <= row || col < 0 || COLS <= col || map[row][col] == WALL;
 }
 
 // returns 1 if the tile specified contains a ghost, 0 if not
-int isGhost(const int ghostPos[NUM_GHOSTS][2], const int row, const int col){
+int isGhost(const int row, const int col){
     for(int i = 0; i < NUM_GHOSTS; ++i)
         if(row == ghostPos[i][0] && col == ghostPos[i][1])
             return 1;
@@ -249,7 +52,7 @@ int isGhost(const int ghostPos[NUM_GHOSTS][2], const int row, const int col){
 
 // initializes the map and the entity positions
 // returns 1 if successful, 0 if the mapfile could not be opened, and -1 if the end of file was reached before the expected amount of input had been read
-int initGame(const char *mapFilePath, char ***map, const int rows, const int cols, int pacManPos[2], int ghostPos[2][2], int *dots){
+int initGame(const char *mapFilePath){
     FILE* mapFile = fopen(mapFilePath, "r");
     if(mapFile == NULL){
         printf("error opening %s: No such file or directory\n", mapFilePath);
@@ -257,31 +60,35 @@ int initGame(const char *mapFilePath, char ***map, const int rows, const int col
         return 0;
     }
 
+    // initalize stuff
+    dotsRemaining = 0;
+    keyDir[UP] = 0, keyDir[DOWN] = 1, keyDir[LEFT] = 2, keyDir[RIGHT] = 3;
+
     // allocate map memory
-    *map = (char **)malloc(rows*sizeof(char*)), *dots = 0;
-    // initialize with WALLs
-    for(int i = 0; i < rows; ++i){
-        (*map)[i] = (char *) malloc(cols * sizeof(char));
-        memset((*map)[i], WALL, cols * sizeof(char));
+    map = (char **)malloc(ROWS * sizeof(char*));
+    // initialize WALLs
+    for(int row = 0; row < ROWS; ++row){
+        map[row] = (char *) malloc(COLS * sizeof(char));
+        memset(map[row], WALL, COLS * sizeof(char));
     }
 
-    for(int i = 1, numGhosts = 0; i < rows-1; ++i) {
-        for(int j = 1; j < cols-1; ++j){
+    for(int row = 1, numGhosts = 0; row < ROWS-1; ++row) {
+        for(int col = 1; col < COLS-1; ++col){
             // read input and check for error
-            if(fscanf(mapFile, "%c ", &(*map)[i][j]) == EOF){
+            if(fscanf(mapFile, "%c ", &map[row][col]) == EOF){
                 printf("error reading %s: reached end of file\n", mapFilePath);
                 fclose(mapFile);
                 return -1;
             }
-            if((*map)[i][j] == PACMAN) {
-                (*map)[i][j] = EMPTY;
-                pacManPos[0] = i, pacManPos[1] = j;
-            }else if((*map)[i][j] == GHOST){
+            if(map[row][col] == PACMAN) {
+                map[row][col] = EMPTY;
+                pacManPos[0] = row, pacManPos[1] = col;
+            }else if(map[row][col] == GHOST){
                 // assuming that a ghost is covering a dot
-                (*map)[i][j] = DOT, ++*dots;
-                ghostPos[numGhosts][0] = i, ghostPos[numGhosts][1] = j, ++numGhosts;
-            }else if((*map)[i][j] == DOT){
-                ++*dots;
+                map[row][col] = DOT, ++dotsRemaining;
+                ghostPos[numGhosts][0] = row, ghostPos[numGhosts][1] = col, ++numGhosts;
+            }else if(map[row][col] == DOT){
+                ++dotsRemaining;
             }
         }
     }
@@ -290,16 +97,16 @@ int initGame(const char *mapFilePath, char ***map, const int rows, const int col
 }
 
 // prints the map and entities with different colours to the console
-void printMap(char **map, const int rows, const int cols, const int pacManPos[2], const int ghostPos[2][2]){
-    for(int i = 0; i < rows; ++i){
+void printMap(){
+    for(int row = 0; row < ROWS; ++row){
         colourChange(BLUE);
-        printf("%c", map[i][0]);
-        for(int j = 1; j < cols; ++j){
-            char c = map[i][j];
-            if(isGhost(ghostPos, i, j)){
+        printf("%c", map[row][0]);
+        for(int col = 1; col < COLS; ++col){
+            char c = map[row][col];
+            if(isGhost(row, col)){
                 c = GHOST;
                 colourChange(PINK);
-            } else if(i == pacManPos[0] && j == pacManPos[1]){
+            } else if(row == pacManPos[0] && col == pacManPos[1]){
                 c = PACMAN;
                 colourChange(YELLOW);
             } else if (c == WALL)
@@ -311,4 +118,104 @@ void printMap(char **map, const int rows, const int cols, const int pacManPos[2]
         puts("");
     }
     colourChange(WHITE);
+}
+
+// returns the minimum distance to pac man from position on the map (row, col) using depth-first-search
+// dirIdx will be the direction corresponding with this shortest path
+int distToPacMan(int *dirIdx, int row, int col){
+    if(row == pacManPos[0] && col == pacManPos[1])
+        return 0;
+
+    vis[row][col] = true;
+
+    int minDist = 1e9, tmpDirIdx = -1;
+    for(int k = 0; k < 4; ++k) {
+        int newRow = row + dirs[k][0], newCol = col + dirs[k][1];
+        if(isWall(newRow, newCol) || vis[newRow][newCol] || (*dirIdx == START && isGhost(newRow, newCol))) continue;
+        // if this is a valid move, compute distance to pac man
+        int dist = distToPacMan(&tmpDirIdx, newRow, newCol);
+        if(dist < minDist)
+            *dirIdx = k, minDist = dist;
+    }
+
+    vis[row][col] = false;
+    return 1 + minDist;
+}
+
+// move ghost in direction of the shortest path to pac man
+void moveGhosts(){
+    // for each ghost on the map
+    for(int g = 0, dirIdx = START; g < NUM_GHOSTS; ++g){
+        distToPacMan(&dirIdx, ghostPos[g][0], ghostPos[g][1]);
+        ghostPos[g][0] += dirs[dirIdx][0], ghostPos[g][1] += dirs[dirIdx][1];
+    }
+}
+
+// Changes PacMan's position based on key input if the new position is not a wall.
+void movePacman(int key){
+    const int newRow = pacManPos[0] + dirs[keyDir[key]][0], newCol = pacManPos[1] + dirs[keyDir[key]][1];
+    if(!isWall(newRow, newCol))
+        pacManPos[0] = newRow, pacManPos[1] = newCol;
+}
+
+// Remove dot from map if PacMan is on a dot
+// returns 1 if dot removed, 0 otherwise
+int removeDot(){
+    if(map[pacManPos[0]][pacManPos[1]] == DOT){
+        map[pacManPos[0]][pacManPos[1]] = EMPTY;
+        --dotsRemaining;
+        return 1;
+    }
+    return 0;
+}
+
+// Check if PacMan has won if the dots remaining are equal to zero.
+// returns 1 if the game is won, 0 otherwise
+int winCheck(){
+    return dotsRemaining == 0;
+}
+
+// If Pacman hits a ghost, he loses.
+// returns 1 if the game is lost, 0 otherwise
+int loseCheck(){
+    // differences in position a ghost can have from pac man that are losing
+    for(int i = 0; i < 5; ++i){
+        if(isGhost(pacManPos[0] + dirs[i][0], pacManPos[1] + dirs[i][1])){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// receives input from the user and only returns the key if it would have an effect on the game
+int input(){
+    int key;
+    do{
+        key = getch();
+    }while(!(key == UP || key == DOWN || key == LEFT || key == RIGHT));
+    return key;
+}
+
+int main() {
+    // load the map array (11 rows, 11 cols) of characters, get initial PacMan and Ghost positions, initialize other variables
+    status = initGame("../map.txt");
+    while(status > 0){
+        printMap();
+        // check if won/lost -> if yes: break the loop and print game over condition to user
+        if(loseCheck()) break;
+        // collect a pellet if PacMan landed on one
+        // this happens after loseCheck because we don't want to collect a dot if the game was lost
+        removeDot();
+        if(winCheck()) break;
+        // movement
+        moveGhosts(), movePacman(input());
+        // clear the console
+        system("CLS");
+    }
+    // game over messages
+    if(dotsRemaining > 0) printf("Sorry, you lose. Press any key to exit the game\n");
+    else printf("Congratulations! You win! Press any key to exit the game\n");
+    getch();
+    free(map);
+    return 0;
 }
