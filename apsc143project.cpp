@@ -29,8 +29,8 @@
 #define NUM_GHOSTS 2
 
 //game constants
-#define ROWS MAP_ROWS+2
-#define COLS MAP_COLS+2
+#define ROWS (MAP_ROWS+2)
+#define COLS (MAP_COLS+2)
 
 // returns 1 if the tile specified is a wall tile or out of bounds, 0 if not.
 int isWall(char **map, const int row, const int col);
