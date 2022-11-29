@@ -129,13 +129,13 @@ int distToPacMan(int *dirIdx, int row, int col){
     vis[row][col] = true;
 
     int minDist = 1e9, tmpDirIdx = -1;
-    for(int k = 0; k < 4; ++k) {
-        int newRow = row + dirs[k][0], newCol = col + dirs[k][1];
+    for(int d = 0; d < 4; ++d) {
+        int newRow = row + dirs[d][0], newCol = col + dirs[d][1];
         if(isWall(newRow, newCol) || vis[newRow][newCol] || (*dirIdx == START && isGhost(newRow, newCol))) continue;
         // if this is a valid move, compute distance to pac man
         int dist = distToPacMan(&tmpDirIdx, newRow, newCol);
         if(dist < minDist)
-            *dirIdx = k, minDist = dist;
+            *dirIdx = d, minDist = dist;
     }
 
     vis[row][col] = false;
