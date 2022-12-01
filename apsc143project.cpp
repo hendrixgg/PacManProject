@@ -119,6 +119,8 @@ int main() {
         printf("Congratulations! You win! Press any key to exit the game\n");
     }
     getch();
+    for(int row = 0; row < ROWS; ++row)
+        free(map[row]);
     free(map);
     return 0;
 }
