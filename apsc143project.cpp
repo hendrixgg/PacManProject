@@ -201,6 +201,8 @@ int main() {
     // game over message
     printf("%s Press any key to exit the game\n", (dotsRemaining > 0) ? "Sorry, you lose." : "Congratulations! You win!");
     getch();
+    for(int row = 0; row < ROWS; ++row)
+        free(map[row]);
     free(map);
     return 0;
 }
