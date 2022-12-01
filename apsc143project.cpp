@@ -128,16 +128,16 @@ int distToPacMan(int *dirIdx, int row, int col){
 
     vis[row][col] = true;
 
-    int minDist = 1e9, tmpDirIdx = -1;
+    int minDist = 1e9, tmpDirIdx = -1, newDirIdx = START;
     for(int d = 0; d < 4; ++d) {
         int newRow = row + dirs[d][0], newCol = col + dirs[d][1];
         if(isWall(newRow, newCol) || vis[newRow][newCol] || (*dirIdx == START && isGhost(newRow, newCol))) continue;
         // if this is a valid move, compute distance to pac man
         int dist = distToPacMan(&tmpDirIdx, newRow, newCol);
         if(dist < minDist)
-            *dirIdx = d, minDist = dist;
+            newDirIdx = d, minDist = dist;
     }
-
+    *dirIdx = newDirIdx;
     vis[row][col] = false;
     return 1 + minDist;
 }
@@ -145,7 +145,7 @@ int distToPacMan(int *dirIdx, int row, int col){
 // move ghost in direction of the shortest path to pac man
 void moveGhosts(){
     // for each ghost on the map
-    for(int g = 0, dirIdx = START; g < NUM_GHOSTS; ++g){
+    for(int g = 0, dirIdx = START; g < NUM_GHOSTS; ++g, dirIdx = START){
         distToPacMan(&dirIdx, ghostPos[g][0], ghostPos[g][1]);
         ghostPos[g][0] += dirs[dirIdx][0], ghostPos[g][1] += dirs[dirIdx][1];
     }
@@ -171,6 +171,7 @@ int removeDot(){
 // Check if PacMan has won if the dots remaining are equal to zero.
 // returns 1 if the game is won, 0 otherwise
 int winCheck(){
+    removeDot();
     return dotsRemaining == 0;
 }
 
@@ -196,11 +197,7 @@ int main() {
     while(status > 0){
         printMap();
         // check if won/lost -> if yes: break the loop and print game over condition to user
-        if(loseCheck()) break;
-        // collect a pellet if PacMan landed on one
-        // this happens after loseCheck because we don't want to collect a dot if the game was lost
-        removeDot();
-        if(winCheck()) break;
+        if(loseCheck() || winCheck()) break;
         // movement
         moveGhosts(), movePacman(input());
         // clear the console
