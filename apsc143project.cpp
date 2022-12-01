@@ -1,6 +1,3 @@
-// APSC 143 Engineering Programming Project Starter Code
-// Feel free to change anything about this file, but do not remove "#include "colours.h"".
-
 // Make sure to include all relevant libraries
 #include <stdio.h>
 #include <conio.h>
@@ -19,7 +16,6 @@
 #define LEFT 'a'
 #define RIGHT 'd'
 #define START 4
-#define ESC 27
 
 // map.txt constants
 #define MAP_ROWS 9
@@ -29,8 +25,9 @@
 // game constants
 #define ROWS (MAP_ROWS+2)
 #define COLS (MAP_COLS+2)
-const int dirs[5][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, 0}}; // {up, down, left, right, contact}
-int keyDir[1<<8]{0};
+// {up, down, left, right, contact}
+const int directions[5][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, 0}};
+int keyDir[UP+1]; // maps an ascii character to an index in directions
 
 // game variables
 int pacManPos[2], ghostPos[NUM_GHOSTS][2], dotsRemaining, status;
@@ -60,9 +57,8 @@ int initGame(const char *mapFilePath){
         return 0;
     }
 
-    // initalize stuff
-    dotsRemaining = 0;
-    keyDir[UP] = 0, keyDir[DOWN] = 1, keyDir[LEFT] = 2, keyDir[RIGHT] = 3;
+    // initialize stuff
+    dotsRemaining = 0, keyDir[UP] = 0, keyDir[DOWN] = 1, keyDir[LEFT] = 2, keyDir[RIGHT] = 3;
 
     // allocate map memory
     map = (char **)malloc(ROWS * sizeof(char*));
@@ -71,7 +67,7 @@ int initGame(const char *mapFilePath){
         map[row] = (char *) malloc(COLS * sizeof(char));
         memset(map[row], WALL, COLS * sizeof(char));
     }
-
+    // read input from file
     for(int row = 1, numGhosts = 0; row < ROWS-1; ++row) {
         for(int col = 1; col < COLS-1; ++col){
             // read input and check for error
@@ -130,7 +126,7 @@ int distToPacMan(int *dirIdx, int row, int col){
 
     int minDist = 1e9, tmpDirIdx = -1, newDirIdx = START;
     for(int d = 0; d < 4; ++d) {
-        int newRow = row + dirs[d][0], newCol = col + dirs[d][1];
+        int newRow = row + directions[d][0], newCol = col + directions[d][1];
         if(isWall(newRow, newCol) || vis[newRow][newCol] || (*dirIdx == START && isGhost(newRow, newCol))) continue;
         // if this is a valid move, compute distance to pac man
         int dist = distToPacMan(&tmpDirIdx, newRow, newCol);
@@ -142,18 +138,17 @@ int distToPacMan(int *dirIdx, int row, int col){
     return 1 + minDist;
 }
 
-// move ghost in direction of the shortest path to pac man
+// move ghosts in direction of the shortest path to pac man
 void moveGhosts(){
-    // for each ghost on the map
     for(int g = 0, dirIdx = START; g < NUM_GHOSTS; ++g, dirIdx = START){
         distToPacMan(&dirIdx, ghostPos[g][0], ghostPos[g][1]);
-        ghostPos[g][0] += dirs[dirIdx][0], ghostPos[g][1] += dirs[dirIdx][1];
+        ghostPos[g][0] += directions[dirIdx][0], ghostPos[g][1] += directions[dirIdx][1];
     }
 }
 
 // Changes PacMan's position based on key input if the new position is not a wall.
 void movePacman(int key){
-    const int newRow = pacManPos[0] + dirs[keyDir[key]][0], newCol = pacManPos[1] + dirs[keyDir[key]][1];
+    const int newRow = pacManPos[0] + directions[keyDir[key]][0], newCol = pacManPos[1] + directions[keyDir[key]][1];
     if(!isWall(newRow, newCol))
         pacManPos[0] = newRow, pacManPos[1] = newCol;
 }
@@ -178,8 +173,8 @@ int winCheck(){
 // If Pacman hits a ghost, he loses.
 // returns 1 if the game is lost, 0 otherwise
 int loseCheck(){
-    for(int i = 0; i < 5; ++i)
-        if(isGhost(pacManPos[0] + dirs[i][0], pacManPos[1] + dirs[i][1]))
+    for(int d = 0; d < sizeof(directions)/sizeof(directions[0]); ++d)
+        if(isGhost(pacManPos[0] + directions[d][0], pacManPos[1] + directions[d][1]))
             return 1;
     return 0;
 }
@@ -203,9 +198,8 @@ int main() {
         // clear the console
         system("CLS");
     }
-    // game over messages
-    if(dotsRemaining > 0) printf("Sorry, you lose. Press any key to exit the game\n");
-    else printf("Congratulations! You win! Press any key to exit the game\n");
+    // game over message
+    printf("%s Press any key to exit the game\n", (dotsRemaining > 0) ? "Sorry, you lose." : "Congratulations! You win!");
     getch();
     free(map);
     return 0;
