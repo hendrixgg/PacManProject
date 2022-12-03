@@ -5,12 +5,14 @@
 #include <string.h>
 #include "colours.h"
 
-// You don't need to use these, but they help make your code look more organized
+// Constants regarding icons
 #define PACMAN 'P'
 #define GHOST 'G'
 #define DOT '.'
 #define WALL 'W'
 #define EMPTY ' '
+
+// Constants regarding player movement
 #define UP 'w'
 #define DOWN 's'
 #define LEFT 'a'
@@ -26,7 +28,7 @@
 #define ROWS (MAP_ROWS+2)
 #define COLS (MAP_COLS+2)
 // {up, down, left, right, contact}
-const int directions[5][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, 0}};
+const int directions[5][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {0, 0}}; // Each possible direction and contact blocks contained in a list
 int keyDir[UP+1]; // maps an ascii character to an index in directions
 
 // game variables
@@ -50,6 +52,7 @@ int isGhost(const int row, const int col){
 // initializes the map and the entity positions
 // returns 1 if successful, 0 if the mapfile could not be opened, and -1 if the end of file was reached before the expected amount of input had been read
 int initGame(const char *mapFilePath){
+    // File opener
     FILE* mapFile = fopen(mapFilePath, "r");
     if(mapFile == NULL){
         printf("error opening %s: No such file or directory\n", mapFilePath);
@@ -89,7 +92,7 @@ int initGame(const char *mapFilePath){
         }
     }
     fclose(mapFile);
-    return 1;
+    return 1; // Everything completed initialization without any errors
 }
 
 // prints the map and entities with different colours to the console
